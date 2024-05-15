@@ -1,5 +1,5 @@
 const {readFileSync, writeFileSync} = require("fs");
-const {resolve, join} = require("path");
+const {join} = require("path");
 const pricesDataPath = join(process.cwd(), "prices.txt")
 
 module.exports = {
@@ -32,9 +32,7 @@ module.exports = {
                         }]
                     }, {
                         "title": "RON95", "color": diff["95"] < 0 ? '#7be863' : '#e85353', "fields": [{
-                            "name": "Giá mới",
-                            "value": `${new95Price.toLocaleString()} đồng/lít`,
-                            "inline": true
+                            "name": "Giá mới", "value": `${new95Price.toLocaleString()} đồng/lít`, "inline": true
                         }, {
                             "name": "Chênh lệch",
                             "value": `${diff["95"] < 0 ? "▼" : "▲"} ${Math.abs(diff["95"]).toLocaleString()} đồng/lít`,

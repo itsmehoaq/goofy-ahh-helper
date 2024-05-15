@@ -1,7 +1,5 @@
 module.exports = {
-    name: 'xinlink',
-    description: 'xin link',
-    async execute(message) {
+    name: 'xinlink', description: 'xin link', async execute(message) {
         if (message.reference) {
             try {
                 const originalMessage = await message.channel.messages.fetch(message.reference.messageId);

@@ -29,7 +29,7 @@ client.on('messageCreate', message => {
         let newUrl = message.content.match(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g)
         if (['x.com', 'twitter.com', 'fxtwitter.com', 'vxtwitter.com', 'fixupx.com'].some(domain => newUrl[0].startsWith(domain))) {
             const command = client.commands.get('add_twitter_embed');
-            command.execute(message,newUrl[0])
+            command.execute(message, newUrl[0])
         }
     }
 
