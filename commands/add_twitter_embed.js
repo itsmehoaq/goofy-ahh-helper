@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'add_twitter_embed', description: 'add preview to twitter / x default links', execute(message,newUrl) {
+    name: 'add_twitter_embed', description: '**[automated]** add preview to twitter / x default links', execute(message,newUrl) {
         try {
                 message.suppressEmbeds(true).then(r => {});
                 let username = newUrl.split('/')[1]

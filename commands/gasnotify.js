@@ -3,7 +3,7 @@ const {resolve, join} = require("path");
 const pricesDataPath = join(process.cwd(), "prices.txt")
 
 module.exports = {
-    name: 'gasnotify', description: 'thông báo giá xăng', async execute(message, args) {
+    name: 'gasnotify', description: '**[bot owner only]** thông báo giá xăng', async execute(message, args) {
         if (message.author.id !== process.env.OWNER) {
             message.reply('ai cho dùng command :clueless:');
         } else {
@@ -23,7 +23,7 @@ module.exports = {
                 message.channel.send({
                     content: "@everyone **ᴘɪɴ ᴘᴏɴ ᴘᴀɴ ᴘᴏɴ**\n**Update giá xăng trong nước, theo kỳ điều chỉnh được áp dụng từ 15h chiều hôm nay như sau:**",
                     embeds: [{
-                        "title": "E5RON92", "color": 16711680, "fields": [{
+                        "title": "E5RON92", "color": diff["92"] < 0 ? '#7be863' : '#e85353', "fields": [{
                             "name": "Giá mới", "value": `${new92Price.toLocaleString()} đồng/lít`, "inline": true
                         }, {
                             "name": "Chênh lệch",
@@ -31,7 +31,7 @@ module.exports = {
                             "inline": true
                         }]
                     }, {
-                        "title": "RON95", "color": 16711680, "fields": [{
+                        "title": "RON95", "color": diff["95"] < 0 ? '#7be863' : '#e85353', "fields": [{
                             "name": "Giá mới",
                             "value": `${new95Price.toLocaleString()} đồng/lít`,
                             "inline": true
