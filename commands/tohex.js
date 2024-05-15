@@ -1,6 +1,6 @@
 module.exports = {
     name: 'tohex',
-    description: 'Convert text to hexadecimal',
+    description: 'convert text to hex',
     execute(message, args) {
         const inputString = args.join(' ');
         const hexString = stringToHex(inputString);
