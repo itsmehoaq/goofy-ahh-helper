@@ -2,7 +2,6 @@ module.exports = {
     name: 'xinlink',
     description: 'xin link',
     async execute(message, args) {
-        // Check if the message is a reply
         if (message.reference) {
             try {
                 const originalMessage = await message.channel.messages.fetch(message.reference.messageId);
