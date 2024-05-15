@@ -1,6 +1,22 @@
 require('dotenv').config();
-const { Client, Intents } = require('discord.js');
+
+const fs = require('fs');
+const path = require('path');
+const { Client, Intents, Collection } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
+const prefix = process.env.PREFIX;
+
+client.commands = new Collection();
+
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
+    client.commands.set(command.name, command);
+}
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -8,37 +24,21 @@ client.once('ready', () => {
 
 client.on('messageCreate', message => {
     if (message.author.bot) return;
+    if (!message.content.startsWith(prefix)) return;
 
-    const args = message.content.split(' ');
-    const command = args.shift().toLowerCase();
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const commandName = args.shift().toLowerCase();
 
-    if (command === '?tohex') {
-        const inputString = args.join(' ');
-        const hexString = stringToHex(inputString);
-        message.reply(`Hex: \n\`\`\`\n${hexString}\`\`\``);
-    } else if (command === '?totext') {
-        const hexString = args.join(' ');
-        try {
-            const normalString = hexToString(hexString);
-            message.reply(`Text: \n\`\`\`\n${normalString}\`\`\``);
-        } catch (error) {
-            message.reply('Invalid hex string.');
-        }
-    } else if (command === '?help') {
-        message.reply(`Available commands:`)
+    if (!client.commands.has(commandName)) return;
+
+    const command = client.commands.get(commandName);
+
+    try {
+        command.execute(message, args);
+    } catch (error) {
+        console.error(error);
+        message.reply('command này mai có :D');
     }
 });
 
-function stringToHex(str) {
-    return str.split('')
-        .map(char => char.charCodeAt(0).toString(16).padStart(2, '0'))
-        .join('');
-}
-
-function hexToString(hex) {
-    return hex.match(/.{1,2}/g)
-        .map(byte => String.fromCharCode(parseInt(byte, 16)))
-        .join('');
-}
-
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.DISCORD_TOKEN);
