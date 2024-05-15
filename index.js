@@ -2,8 +2,8 @@ require('dotenv').config();
 
 const fs = require('fs');
 const path = require('path');
-const { Client, Intents, Collection } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const {Client, Intents, Collection} = require('discord.js');
+const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]});
 
 const prefix = process.env.PREFIX;
 
@@ -24,6 +24,15 @@ client.once('ready', () => {
 
 client.on('messageCreate', message => {
     if (message.author.bot) return;
+
+    if (message.content.match(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g)) {
+        let newUrl = message.content.match(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g)
+        if (['x.com', 'twitter.com', 'fxtwitter.com', 'vxtwitter.com', 'fixupx.com'].some(domain => newUrl[0].startsWith(domain))) {
+            const command = client.commands.get('add_twitter_embed');
+            command.execute(message,newUrl[0])
+        }
+    }
+
     if (!message.content.startsWith(prefix)) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
