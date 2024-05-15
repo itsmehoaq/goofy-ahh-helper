@@ -1,5 +1,5 @@
-const {readFileSync, writeFileSync} = require("fs");
-const {resolve, join} = require("path");
+const {writeFileSync} = require("fs");
+const {join} = require("path");
 const pricesDataPath = join(process.cwd(), "prices.txt")
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
             try {
                 let new92Price = parseInt(args[0]) ?? undefined;
                 let new95Price = parseInt(args[1]) ?? undefined;
-                
+
                 writeFileSync(pricesDataPath, new92Price + "," + new95Price, "utf-8");
 
                 message.reply('\`prices.txt\` updated!').then(function (message1) {
