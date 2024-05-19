@@ -20,6 +20,8 @@ module.exports = {
 
                 writeFileSync(pricesDataPath, new92Price + "," + new95Price, "utf-8");
 
+                message.delete();
+
                 message.channel.send({
                     content: "@everyone **ᴘɪɴ ᴘᴏɴ ᴘᴀɴ ᴘᴏɴ**\n**Update giá xăng trong nước, theo kỳ điều chỉnh được áp dụng từ 15h chiều hôm nay như sau:**",
                     embeds: [{

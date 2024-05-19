@@ -1,6 +1,6 @@
 module.exports = {
     name: 'add_twitter_embed',
-    description: '**[automated]** add preview to twitter / x default links',
+    description: '**[automated]** sửa preview link twitter / x',
     execute(message, newUrl) {
         try {
             message.suppressEmbeds(true).then(r => {

@@ -10,14 +10,14 @@ module.exports = {
                     .setColor('#e3e289')
                     .setTitle('tohex')
                     .addFields({name: 'wat do', value: 'convert text to hex'}, {name: 'usage limit', value: 'everyone'})
-                    .setFooter({text: 'powered by HoaqGPT \u2122'});
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
             case 'totext':
                 embed = new MessageEmbed()
                     .setColor('#e3e289')
                     .setTitle('totext')
                     .addFields({name: 'wat do', value: 'convert hex to text'}, {name: 'usage limit', value: 'everyone'})
-                    .setFooter({text: 'powered by HoaqGPT \u2122'});
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
             case 'xinlink':
                 embed = new MessageEmbed()
@@ -26,7 +26,7 @@ module.exports = {
                     .addFields({name: 'wat do', value: 'xin sốt'}, {
                         name: 'usage limit', value: 'everyone, chỉ hoạt động khi reply tin nhắn bằng lệnh này'
                     })
-                    .setFooter({text: 'powered by HoaqGPT \u2122'});
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
             case 'gasnotify':
                 embed = new MessageEmbed()
@@ -35,7 +35,7 @@ module.exports = {
                     .addFields({name: 'wat do', value: 'thông báo giá xăng'}, {
                         name: 'usage limit', value: 'bot owner'
                     })
-                    .setFooter({text: 'powered by HoaqGPT \u2122'});
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
             case 'gasupdate':
                 embed = new MessageEmbed()
@@ -44,14 +44,28 @@ module.exports = {
                     .addFields({
                         name: 'wat do', value: 'cập nhật file giá xăng'
                     }, {name: 'usage limit', value: 'bot owner'})
-                    .setFooter({text: 'powered by HoaqGPT \u2122'});
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
+                break;
+            case 'shortlink':
+                embed = new MessageEmbed()
+                    .setColor('#e3e289')
+                    .setTitle('shortlink')
+                    .addFields({
+                        name: 'wat do', value: 'tạo link rút gọn và xem danh sách link đã tạo'
+                    }, {name: 'usage limit', value: 'everyone'}, {
+                        name: 'tạo link', value: '\`?shortlink <link gốc>\`'
+                    }, {
+                        name: 'xem danh sách link',
+                        value: '\`?shortlink list <page>\` (\`<page>\` không bắt buộc, chỉ dùng khi tạo nhiều hơn 10 link)'
+                    }, {name: 'lưu ý', value: 'có thể dùng \`?sl\` thay \`?shortlink\`'})
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
             default:
                 embed = new MessageEmbed()
                     .setColor('#e3e289')
                     .setTitle('wat the car doing')
                     .setDescription('dùng \`?help <command_name>\` để biết thêm thông tin về command')
-                    .setFooter({text: 'powered by HoaqGPT \u2122'});
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
                 commands.forEach(command => {
                     embed.addField(`**${command.name}**`, `${command.description}`);
                 });

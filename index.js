@@ -3,9 +3,11 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const {Client, Intents, Collection} = require('discord.js');
+const database = require('./database');
+const {aliases} = require("./commands/shortlink");
 const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]});
 
-const prefix = process.env.PREFIX;
+const prefix = (process.env.DEV_MODE === 1) ? "??" : process.env.PREFIX;
 
 client.commands = new Collection();
 
@@ -18,8 +20,17 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+(async () => {
+    try {
+        await database.connect();
+    } catch (error) {
+        console.log('Failed to connect to database!')
+    }
+})();
+
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
+    console.log(client.commands);
 });
 
 client.on('messageCreate', message => {
@@ -38,9 +49,11 @@ client.on('messageCreate', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    if (!client.commands.has(commandName)) return;
+    // if (!client.commands.has(commandName)) return;
 
-    const command = client.commands.get(commandName);
+    const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
+    console.log(command);
 
     try {
         command.execute(message, args);
