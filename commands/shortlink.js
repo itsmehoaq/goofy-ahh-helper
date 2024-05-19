@@ -2,6 +2,7 @@ const {MessageEmbed} = require("discord.js");
 const crypto = require('crypto');
 const {Shortlink} = require('../database/models/shortlink.js');
 const {Counter} = require('../database/models/counter.js');
+const {URL} = require('url');
 const database = require('../database');
 
 module.exports = {
@@ -19,51 +20,65 @@ module.exports = {
     },
 };
 
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
 async function createShortlink(message, args) {
-    const key = generateRandomAlphaNumericString(7);
-    const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/storage/kv/namespaces/${process.env.CLOUDFLARE_NAMESPACE_ID}/bulk`, {
-        method: 'PUT', headers: {
-            'Authorization': 'Bearer ' + process.env.CLOUDFLARE_TOKEN, 'Content-Type': 'application/json'
-        }, body: JSON.stringify([{
-            'key': key, 'value': args[1]
-        }])
-    })
-    let embed;
-    if (response.ok) {
-        try {
-            let counter = await Counter.findOneAndUpdate({coll: "shortlinks"}, {$inc: {seq: 1}}, {new: true});
+    if (isValidUrl(args[2] === false)) {
+        message.delete();
+        message.channel.send(`<@${message.author.id}> không phải URL hợp lệ!`);
+    } else {
+        message.delete();
+        const key = generateRandomAlphaNumericString(7);
+        const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/storage/kv/namespaces/${process.env.CLOUDFLARE_NAMESPACE_ID}/bulk`, {
+            method: 'PUT', headers: {
+                'Authorization': 'Bearer ' + process.env.CLOUDFLARE_TOKEN, 'Content-Type': 'application/json'
+            }, body: JSON.stringify([{
+                'key': key, 'value': args[1]
+            }])
+        })
+        let embed;
+        if (response.ok) {
+            try {
+                let counter = await Counter.findOneAndUpdate({coll: "shortlinks"}, {$inc: {seq: 1}}, {new: true});
 
-            if (!counter) {
-                counter = await Counter.create({
-                    coll: "shortlinks", seq: 1,
+                if (!counter) {
+                    counter = await Counter.create({
+                        coll: "shortlinks", seq: 1,
+                    });
+                }
+                await Shortlink.create({
+                    idx: counter.seq, discord_id: message.author.id, key: key, url: args[1]
                 });
+
+                embed = new MessageEmbed()
+                    .setColor('#7ae696')
+                    .setTitle(`đã tạo link rút gọn #${counter.seq}`)
+                    .addFields({name: 'URL', value: `https://s.hoaq.net/${key}`}, {name: 'destination', value: args[1]})
+                    .setFooter({text: 'powered by MunGPT\u2122'});
+                await message.author.send({embeds: [embed]})
+
+            } catch (error) {
+                embed = new MessageEmbed()
+                    .setColor('#e67a7a')
+                    .setTitle('đã có lỗi xảy ra khi tạo link rút gọn')
+                    .addFields({name: 'error', value: error.message})
+                    .setFooter({text: 'powered by MunGPT \u2122'});
+                await message.author.send({embeds: [embed]})
             }
-            await Shortlink.create({
-                idx: counter.seq, discord_id: message.author.id, key: key, url: args[1]
-            });
-
-            embed = new MessageEmbed()
-                .setColor('#7ae696')
-                .setTitle(`đã tạo link rút gọn #${counter.seq}`)
-                .addFields({name: 'URL', value: `https://s.hoaq.net/${key}`}, {name: 'destination', value: args[1]})
-                .setFooter({text: 'powered by MunGPT\u2122'});
-            await message.author.send({embeds: [embed]})
-
-        } catch (error) {
+        } else {
             embed = new MessageEmbed()
                 .setColor('#e67a7a')
                 .setTitle('đã có lỗi xảy ra khi tạo link rút gọn')
-                .addFields({name: 'error', value: error.message})
+                .addFields({name: 'error code', value: response.status}, {name: 'message', value: response.statusText})
                 .setFooter({text: 'powered by MunGPT \u2122'});
             await message.author.send({embeds: [embed]})
         }
-    } else {
-        embed = new MessageEmbed()
-            .setColor('#e67a7a')
-            .setTitle('đã có lỗi xảy ra khi tạo link rút gọn')
-            .addFields({name: 'error code', value: response.status}, {name: 'message', value: response.statusText})
-            .setFooter({text: 'powered by MunGPT \u2122'});
-        await message.author.send({embeds: [embed]})
     }
 }
 

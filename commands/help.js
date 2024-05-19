@@ -50,6 +50,7 @@ module.exports = {
                 embed = new MessageEmbed()
                     .setColor('#e3e289')
                     .setTitle('shortlink')
+                    .setDescription('trong cài đặt Discord **phải bật Allow direct message from server members**!')
                     .addFields({
                         name: 'wat do', value: 'tạo link rút gọn và xem danh sách link đã tạo'
                     }, {name: 'usage limit', value: 'everyone'}, {
@@ -57,8 +58,7 @@ module.exports = {
                     }, {
                         name: 'xem danh sách link',
                         value: '\`?shortlink list <page>\` (\`<page>\` không bắt buộc, chỉ dùng khi tạo nhiều hơn 10 link)'
-                    }, {name: 'lưu ý', value: 'có thể dùng \`?sl\` thay \`?shortlink\`'},
-                        {name: 'lưu ý quan trọng hơn', value: 'trong cài đặt Discord **phải bật Allow direct message from server members**!'}
+                    }, {name: 'lưu ý', value: 'có thể dùng \`?sl\` thay \`?shortlink\`'}
                     )
                     .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
