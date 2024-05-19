@@ -57,7 +57,9 @@ module.exports = {
                     }, {
                         name: 'xem danh sách link',
                         value: '\`?shortlink list <page>\` (\`<page>\` không bắt buộc, chỉ dùng khi tạo nhiều hơn 10 link)'
-                    }, {name: 'lưu ý', value: 'có thể dùng \`?sl\` thay \`?shortlink\`'})
+                    }, {name: 'lưu ý', value: 'có thể dùng \`?sl\` thay \`?shortlink\`'},
+                        {name: 'lưu ý quan trọng hơn', value: 'trong cài đặt Discord **phải bật Allow direct message from server members**!'}
+                    )
                     .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
             default:
