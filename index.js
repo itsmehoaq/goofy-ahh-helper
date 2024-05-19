@@ -30,7 +30,6 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    console.log(client.commands);
 });
 
 client.on('messageCreate', message => {
