@@ -53,7 +53,7 @@ module.exports = {
                     .addFields({
                         name: 'wat do', value: 'tạo link rút gọn và xem danh sách link đã tạo'
                     }, {name: 'usage limit', value: 'everyone'}, {
-                        name: 'tạo link', value: '\`?shortlink <link gốc>\`'
+                        name: 'tạo link', value: '\`?shortlink create <link gốc>\`'
                     }, {
                         name: 'xem danh sách link',
                         value: '\`?shortlink list <page>\` (\`<page>\` không bắt buộc, chỉ dùng khi tạo nhiều hơn 10 link)'
