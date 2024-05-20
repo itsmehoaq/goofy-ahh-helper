@@ -58,4 +58,9 @@ client.on('messageCreate', message => {
     }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+if (process.env.DEV_MODE === '1') {
+    client.login(process.env.DEV_DISCORD_TOKEN);
+} else {
+    client.login(process.env.DISCORD_TOKEN);
+}
+
