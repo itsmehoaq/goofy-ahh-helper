@@ -2,12 +2,12 @@ require('dotenv').config();
 
 const fs = require('fs');
 const path = require('path');
-const {Client, Intents, Collection} = require('discord.js');
+const {Client, Intents, Collection, MessageEmbed} = require('discord.js');
 const database = require('./database');
 const {aliases} = require("./commands/shortlink");
 const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]});
 
-const prefix = (process.env.DEV_MODE === 1) ? "??" : process.env.PREFIX;
+const prefix = process.env.PREFIX;
 
 client.commands = new Collection();
 
@@ -24,11 +24,25 @@ for (const file of commandFiles) {
     try {
         await database.connect();
     } catch (error) {
-        console.log('Failed to connect to database!')
+        const channel = await client.channels.fetch(process.env.LOG_CHANNEL);
+        let embed = new MessageEmbed()
+            .setColor('#e38989')
+            .setTitle('An error occured!')
+            .addFields({name: 'error', value: 'Failed to connect to database!'})
+            .setFooter({text: 'powered by HoaqGPT\u2122'})
+        channel.send({embeds: [embed]});
+        // console.log('Failed to connect to database!')
     }
 })();
 
-client.once('ready', () => {
+client.once('ready', async () => {
+    const channel = await client.channels.fetch(process.env.LOG_CHANNEL);
+    let embed = new MessageEmbed()
+        .setColor('#8ce389')
+        .setTitle('Status update')
+        .addFields({name: 'message', value: 'Bot is online!'})
+        .setFooter({text: 'powered by HoaqGPT\u2122'})
+    channel.send({embeds: [embed]});
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
@@ -54,13 +68,9 @@ client.on('messageCreate', message => {
         command.execute(message, args);
     } catch (error) {
         console.error(error);
-        message.reply('command này mai có :D');
+        message.reply(`?`);
     }
 });
 
-if (process.env.DEV_MODE === '1') {
-    client.login(process.env.DEV_DISCORD_TOKEN);
-} else {
-    client.login(process.env.DISCORD_TOKEN);
-}
+client.login(process.env.DEV_MODE === '1' ? process.env.DEV_DISCORD_TOKEN : process.env.DISCORD_TOKEN);
 

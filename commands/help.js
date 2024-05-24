@@ -54,20 +54,38 @@ module.exports = {
                     .addFields({
                         name: 'wat do', value: 'tạo link rút gọn và xem danh sách link đã tạo'
                     }, {name: 'usage limit', value: 'everyone'}, {
-                        name: 'tạo link', value: '\`?shortlink create <link gốc>\`'
+                        name: 'tạo link', value: '\`?shortlink create [link gốc]\`'
                     }, {
                         name: 'xem danh sách link',
-                        value: '\`?shortlink list <page>\` (\`<page>\` không bắt buộc, chỉ dùng khi tạo nhiều hơn 10 link)'
-                    }, {name: 'lưu ý', value: 'có thể dùng \`?sl\` thay \`?shortlink\`'})
+                        value: '\`?shortlink list [page]\` (\`[page]\` không bắt buộc, chỉ dùng khi tạo nhiều hơn 10 link)'
+                    }, {name: 'aliases', value: '\`?sl\` / \`?shortlink\`'})
+                    .setFooter({text: 'powered by HoaqGPT\u2122'});
+                break;
+            case 'sl':
+                embed = new MessageEmbed()
+                    .setColor('#e3e289')
+                    .setTitle('shortlink')
+                    .setDescription('trong cài đặt Discord **phải bật Allow direct message from server members**!')
+                    .addFields({
+                        name: 'wat do', value: 'tạo link rút gọn và xem danh sách link đã tạo'
+                    }, {name: 'usage limit', value: 'everyone'}, {
+                        name: 'tạo link', value: '\`?shortlink create [link gốc]\`'
+                    }, {
+                        name: 'xem danh sách link',
+                        value: '\`?shortlink list [page]\` (\`[page]\` không bắt buộc, chỉ dùng khi tạo nhiều hơn 10 link)'
+                    }, {name: 'aliases', value: '\`?sl\` / \`?shortlink\`'})
                     .setFooter({text: 'powered by HoaqGPT\u2122'});
                 break;
             default:
                 embed = new MessageEmbed()
                     .setColor('#e3e289')
                     .setTitle('wat the car doing')
-                    .setDescription('dùng \`?help <command_name>\` để biết thêm thông tin về command')
+                    .setDescription('dùng \`?help [command_name]\` để biết thêm thông tin về command')
                     .setFooter({text: 'powered by HoaqGPT\u2122'});
                 commands.forEach(command => {
+                    if (['add_twitter_embed', 'gasnotify', 'gasupdate', 'help'].includes(command.name)) {
+                        return;
+                    }
                     embed.addField(`**${command.name}**`, `${command.description}`);
                 });
                 break;
