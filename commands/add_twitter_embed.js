@@ -4,7 +4,7 @@ module.exports = {
             message.suppressEmbeds(true).then(r => {
             });
             let username = newUrl.split('/')[1]
-            message.channel.send(`[Tweet \u25b8 @${username}](https://fixup${newUrl.replace('twitter.', 'x.').replace('fixupx.', 'x.')})`)
+            message.channel.send(`[Tweet \u25b8 @${username}](https://fixup${newUrl.replace('twitter.', 'x.').replace('fixupx.', 'x.').replace('vxtwitter.', 'x.').replace('fxtwitter.', 'x.')})`)
         } catch (error) {
             message.channel.send('lỗi rồi pri :D');
         }
