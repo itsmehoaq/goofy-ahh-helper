@@ -4,7 +4,11 @@ module.exports = {
             message.suppressEmbeds(true).then(r => {
             });
             let username = newUrl.split('/')[1]
-            message.channel.send(`[Tweet \u25b8 @${username}](https://fixv${newUrl.replace('fixupx.', 'x.').replace('vxtwitter.', 'x.').replace('fxtwitter.', 'x.').replace('twitter.', 'x.')})`)
+
+            if (message.content.includes("||")) {
+            } else {
+                message.channel.send(`[Tweet \u25b8 @${username}](https://fixv${newUrl.replace('fixupx.', 'x.').replace('vxtwitter.', 'x.').replace('fxtwitter.', 'x.').replace('twitter.', 'x.')})`)
+            }
         } catch (error) {
             message.channel.send('lỗi rồi pri :D');
         }
