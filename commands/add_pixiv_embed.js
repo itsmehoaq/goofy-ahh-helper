@@ -6,7 +6,7 @@ module.exports = {
 
             if (message.content.includes("||")) {
             } else {
-                message.channel.send(`${newUrl.replace('https://www.pixiv', 'https://www.phixiv')}`)
+                message.channel.send(`https://${newUrl.replace('www.pixiv', 'phixiv')}`)
             }
         } catch (error) {
             message.channel.send('lỗi rồi pri :D');
