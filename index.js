@@ -55,6 +55,10 @@ client.on('messageCreate', message => {
             const command = client.commands.get('add_twitter_embed');
             command.execute(message, newUrl[0])
         }
+        if (['pixiv.net'].some(domain => newUrl[0].startsWith(domain))) {
+            const command = client.commands.get('add_pixiv_embed');
+            command.execute(message, newUrl[0])
+        }
     }
 
     if (!message.content.startsWith(prefix)) return;
