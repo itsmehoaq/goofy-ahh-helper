@@ -59,7 +59,7 @@ async function createShortlink(message, args) {
                 embed = new MessageEmbed()
                     .setColor('#7ae696')
                     .setTitle(`đã tạo link rút gọn #${counter.seq}`)
-                    .addFields({name: 'URL', value: `https://s.hoaq.net/${key}`}, {name: 'destination', value: args[1]})
+                    .addFields({name: 'URL', value: `https://s.hoaq.id.vn/${key}`}, {name: 'destination', value: args[1]})
                     .setFooter({text: 'powered by MunGPT\u2122'});
                 await message.author.send({embeds: [embed]})
 
