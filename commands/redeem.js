@@ -44,20 +44,20 @@ module.exports = {
     options: [
         {
             name: 'platform',
-            description: 'Choose the gaming platform',
+            description: 'Set game sử dụng code',
             type: 'STRING',
             required: true,
             choices: PLATFORM_CHOICES
         },
         {
             name: 'code',
-            description: 'The redeem code',
+            description: 'Redeem code',
             type: 'STRING',
             required: true
         },
         {
             name: 'prefill',
-            description: 'Whether to prefill the code in the URL',
+            description: 'Điền code vào URL để nhận nhanh',
             type: 'BOOLEAN',
             required: false
         }
@@ -75,10 +75,10 @@ module.exports = {
         const embed = new MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`${platform} Redeem Code`)
-            .setDescription(`Here's your redeem code for ${platform}`)
+            .setDescription(`Redeem code for ${platform}`)
             .addFields(
                 {name: 'Code', value: `\`${code}\``, inline: true},
-                {name: 'Platform', value: platform, inline: true},
+                {name: 'Game', value: platform, inline: true},
                 {
                     name: 'URL Type',
                     value: prefill ? '🔗 Code pre-filled in URL' : '🔗 Manual redeem page',
@@ -86,11 +86,10 @@ module.exports = {
                 },
                 {
                     name: 'Redeem Link',
-                    value: `[Click here to redeem](${redeemLink})`
+                    value: `${redeemLink}`
                 }
             )
             .setTimestamp()
-            .setFooter({text: 'Game Redeem Code System'});
 
         const row = new MessageActionRow()
             .addComponents(
@@ -125,11 +124,10 @@ module.exports = {
         });
 
         collector.on('end', collected => {
-            // Only disable the copy button, keep the link button active
             const updatedRow = new MessageActionRow()
                 .addComponents(
                     row.components[0].setDisabled(true),
-                    row.components[1] // Link button stays the same
+                    row.components[1]
                 );
             interaction.editReply({components: [updatedRow]}).catch(console.error);
         });
