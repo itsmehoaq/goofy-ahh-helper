@@ -5,20 +5,37 @@ const path = require('path');
 const {Client, Intents, Collection, MessageEmbed} = require('discord.js');
 const database = require('./database');
 const {aliases} = require("./commands/shortlink");
-const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]});
+const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]});
 
 const prefix = process.env.PREFIX;
 
 client.commands = new Collection();
 
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const loadCommands = () => {
+    const commandFoldersPath = path.join(__dirname, 'commands');
+    const commandFolders = fs.readdirSync(commandFoldersPath).filter(file =>
+        fs.statSync(path.join(commandFoldersPath, file)).isDirectory()
+    );
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    client.commands.set(command.name, command);
-}
+    for (const folder of commandFolders) {
+        const commandPath = path.join(commandFoldersPath, folder);
+        const commandFile = fs.readdirSync(commandPath).find(file => file === 'index.js');
+
+        if (commandFile) {
+            const command = require(path.join(commandPath, commandFile));
+            client.commands.set(command.name, command);
+            console.log(`Loaded folder command: ${command.name}`);
+        }
+    }
+
+    const commandFiles = fs.readdirSync(commandFoldersPath).filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+        const filePath = path.join(commandFoldersPath, file);
+        const command = require(filePath);
+        client.commands.set(command.name, command);
+        console.log(`Loaded file command: ${command.name}`);
+    }
+};
 
 (async () => {
     try {
@@ -31,11 +48,61 @@ for (const file of commandFiles) {
             .addFields({name: 'error', value: 'Failed to connect to database!'})
             .setFooter({text: 'powered by HoaqGPT\u2122'})
         channel.send({embeds: [embed]});
-        // console.log('Failed to connect to database!')
     }
 })();
 
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const command = client.commands.get(interaction.commandName);
+
+    if (!command) return;
+
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({
+            content: 'There was an error executing this command!',
+            ephemeral: true
+        });
+    }
+});
+
+const registerCommands = async () => {
+    try {
+        console.log('Started refreshing application (/) commands.');
+
+        const commands = [];
+        client.commands.forEach(command => {
+            if (command.options) { // Only add commands that have slash command options
+                commands.push({
+                    name: command.name,
+                    description: command.description,
+                    options: command.options
+                });
+            }
+        });
+
+        if (process.env.GUILD_ID) {
+            const guild = await client.guilds.fetch(process.env.GUILD_ID);
+            if (guild) {
+                await guild.commands.set(commands);
+                console.log('Successfully registered guild commands.');
+            }
+        } else {
+            await client.application?.commands.set(commands);
+            console.log('Successfully registered global commands.');
+        }
+
+    } catch (error) {
+        console.error('Error registering commands:', error);
+    }
+};
+
 client.once('ready', async () => {
+    loadCommands();
+
     const channel = await client.channels.fetch(process.env.LOG_CHANNEL);
     let embed = new MessageEmbed()
         .setColor('#8ce389')
@@ -43,6 +110,9 @@ client.once('ready', async () => {
         .addFields({name: 'message', value: 'Bot is online!'})
         .setFooter({text: 'powered by HoaqGPT\u2122'})
     channel.send({embeds: [embed]});
+
+    await registerCommands();
+
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
@@ -66,15 +136,15 @@ client.on('messageCreate', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
     if (!command) return;
 
     try {
         command.execute(message, args);
     } catch (error) {
         console.error(error);
-        message.reply(`?`);
+        message.reply('There was an error trying to execute that command!');
     }
 });
 
 client.login(process.env.DEV_MODE === '1' ? process.env.DEV_DISCORD_TOKEN : process.env.DISCORD_TOKEN);
-
