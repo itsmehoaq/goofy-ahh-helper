@@ -1,9 +1,11 @@
 module.exports = {
-    name: 'totext', description: 'convert hex to text', execute(message, args) {
+    name: 'totext',
+    description: 'convert hex to text',
+    execute(message, args) {
         const hexString = args.join(' ');
         try {
             const normalString = hexToString(hexString);
-            message.reply(`Text: \`\`\`\n${normalString}\`\`\``);
+            message.reply(`${normalString}`);
         } catch (error) {
             message.reply('Invalid hex string.');
         }
@@ -11,7 +13,8 @@ module.exports = {
 };
 
 function hexToString(hex) {
-    return hex.match(/.{1,2}/g)
+    const cleanedHex = hex.replace(/\s+/g, '');
+    return cleanedHex.match(/.{1,2}/g)
         .map(byte => String.fromCharCode(parseInt(byte, 16)))
         .join('');
 }
