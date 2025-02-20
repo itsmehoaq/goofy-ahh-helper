@@ -104,22 +104,23 @@ module.exports = {
             }
         }
     },
-    initialize(client) {
-        client.on('ready', () => {
-            const now = moment();
-            const nextThursday = now.clone().day(4).hour(15).minute(0).second(0);
-            if (now.day() > 4 || (now.day() === 4 && now.hour() >= 15)) {
-                nextThursday.add(1, 'week');
-            }
-            const delay = nextThursday.diff(now);
-            setTimeout(() => {
-                setInterval(() => {
-                    const channel = client.channels.cache.find(c => c.name === 'commands');
-                    if (channel) {
-                        channel.send('?gasnotify');
-                    }
-                }, 7 * 24 * 60 * 60 * 1000);
-            }, delay);
-        });
-    }
+    // TODO: timer to trigger ?gasnotify, totally broken @munehime for help
+    // initialize(client) {
+    //     client.on('ready', () => {
+    //         const now = moment();
+    //         const nextThursday = now.clone().day(4).hour(15).minute(0).second(0);
+    //         if (now.day() > 4 || (now.day() === 4 && now.hour() >= 15)) {
+    //             nextThursday.add(1, 'week');
+    //         }
+    //         const delay = nextThursday.diff(now);
+    //         setTimeout(() => {
+    //             setInterval(() => {
+    //                 const channel = client.channels.cache.find(c => c.name === 'commands');
+    //                 if (channel) {
+    //                     channel.send('?gasnotify');
+    //                 }
+    //             }, 7 * 24 * 60 * 60 * 1000);
+    //         }, delay);
+    //     });
+    // }
 };
