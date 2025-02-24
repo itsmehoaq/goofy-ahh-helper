@@ -1,15 +1,14 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const moment = require('moment');
+const path  = require('path');
 const { writeFileSync, readFileSync, existsSync } = require('fs');
-const { join } = require('path');
 
 module.exports = {
     name: 'gasnotify',
     description: 'Check cập nhật giá xăng và thông báo (tự động, kinda)',
     async execute(message, args, client) {
         const URL = 'https://vnexpress.net/chu-de/gia-xang-dau-3026';
-        const pricesDataPath = join(process.cwd(), "prices.txt");
+        const pricesDataPath = path.join(__dirname, '../data/prices.txt');
 
         if (message.author.id !== process.env.OWNER) {
             return message.reply('ai cho dùng command :clueless:');
@@ -105,22 +104,4 @@ module.exports = {
         }
     },
     // TODO: timer to trigger ?gasnotify, totally broken @munehime for help
-    // initialize(client) {
-    //     client.on('ready', () => {
-    //         const now = moment();
-    //         const nextThursday = now.clone().day(4).hour(15).minute(0).second(0);
-    //         if (now.day() > 4 || (now.day() === 4 && now.hour() >= 15)) {
-    //             nextThursday.add(1, 'week');
-    //         }
-    //         const delay = nextThursday.diff(now);
-    //         setTimeout(() => {
-    //             setInterval(() => {
-    //                 const channel = client.channels.cache.find(c => c.name === 'commands');
-    //                 if (channel) {
-    //                     channel.send('?gasnotify');
-    //                 }
-    //             }, 7 * 24 * 60 * 60 * 1000);
-    //         }, delay);
-    //     });
-    // }
 };

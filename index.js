@@ -5,6 +5,7 @@ const path = require('path');
 const {Client, Intents, Collection, MessageEmbed} = require('discord.js');
 const database = require('./database');
 const {aliases} = require("./commands/shortlink");
+const budgetCommand = require('./commands/budget');
 const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]});
 
 const prefix = process.env.PREFIX;
@@ -75,7 +76,7 @@ const registerCommands = async () => {
 
         const commands = [];
         client.commands.forEach(command => {
-            if (command.options) { // Only add commands that have slash command options
+            if (command.options) {
                 commands.push({
                     name: command.name,
                     description: command.description,
@@ -131,11 +132,20 @@ client.on('messageCreate', message => {
         }
     }
 
+    if (!message.content.startsWith(prefix)) {  // if message is not a command
+        budgetCommand.execute(message, []);
+    }
+
     if (!message.content.startsWith(prefix)) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
+    if (commandName === 'budget') {
+        budgetCommand.execute(message, args);
+        return;
+    }
 
     if (!command) return;
 
