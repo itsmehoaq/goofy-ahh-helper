@@ -1,0 +1,9 @@
+[
+  "rec",
+  "recommend",
+  "kiem giup",
+  "rcm",
+  "tim giup",
+  "tim ho",
+  "suggest budget"
+]

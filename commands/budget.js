@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const TRIGGERS_FILE = path.join(__dirname, '../data/budget_triggers.txt');
+const TRIGGERS_FILE = path.join(__dirname, '../data/triggers.txt');
 
 module.exports = {
     name: 'budget',
