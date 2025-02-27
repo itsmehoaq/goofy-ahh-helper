@@ -5,7 +5,7 @@ const path = require('path');
 const {Client, Intents, Collection, MessageEmbed} = require('discord.js');
 const database = require('./database');
 const {aliases} = require("./commands/shortlink");
-const budgetCommand = require('./commands/budget');
+const triggerCommand = require('./commands/budget');
 const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]});
 
 const prefix = process.env.PREFIX;
@@ -133,7 +133,13 @@ client.on('messageCreate', message => {
     }
 
     if (!message.content.startsWith(prefix)) {  // if message is not a command
-        budgetCommand.execute(message, []);
+        if (!message.content.startsWith(prefix)) {
+            const triggerWord = triggerCommand.checkForTriggers(message);
+            if (triggerWord) {
+                triggerCommand.handleTriggerResponse(message, triggerWord);
+            }
+            return;
+        }
     }
 
     if (!message.content.startsWith(prefix)) return;
@@ -142,8 +148,13 @@ client.on('messageCreate', message => {
     const commandName = args.shift().toLowerCase();
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-    if (commandName === 'budget') {
-        budgetCommand.execute(message, args);
+    if (commandName === 'trigger') {
+        triggerCommand.execute(message, args);
+        return;
+    }
+
+    if (commandName === 'trigger_add') {
+        triggerCommand.execute(message, ['add', ...args]);
         return;
     }
 

@@ -5,5 +5,5 @@
   "rcm",
   "tim giup",
   "tim ho",
-  "suggest budget"
+  "suggest"
 ]
