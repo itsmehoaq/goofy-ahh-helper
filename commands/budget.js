@@ -53,7 +53,7 @@ module.exports = {
     },
 
     handleTriggerResponse(message, triggerWord) {
-        message.reply('${message.author} nếu đang cần recommend thì nổ cái budget ra trước rồi tính tiếp :thumbsup:');
+        message.reply('nếu đang cần recommend thì nổ cái budget ra trước rồi tính tiếp :thumbsup:');
     },
 
     execute(message, args) {
