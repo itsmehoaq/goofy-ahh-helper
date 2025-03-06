@@ -132,7 +132,7 @@ client.on('messageCreate', message => {
         }
     }
 
-    if (!message.content.startsWith(prefix)) {  // if message is not a command
+    if (!message.content.startsWith(prefix)) {
         if (!message.content.startsWith(prefix)) {
             const triggerWord = triggerCommand.checkForTriggers(message);
             if (triggerWord) {
