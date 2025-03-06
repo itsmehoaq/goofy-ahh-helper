@@ -5,7 +5,6 @@ const path = require('path');
 const {Client, Intents, Collection, MessageEmbed} = require('discord.js');
 const database = require('./database');
 const {aliases} = require("./commands/shortlink");
-const triggerCommand = require('./commands/budget');
 const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]});
 
 const prefix = process.env.PREFIX;
