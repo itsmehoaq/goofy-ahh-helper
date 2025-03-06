@@ -132,31 +132,11 @@ client.on('messageCreate', message => {
         }
     }
 
-    if (!message.content.startsWith(prefix)) {
-        if (!message.content.startsWith(prefix)) {
-            const triggerWord = triggerCommand.checkForTriggers(message);
-            if (triggerWord) {
-                triggerCommand.handleTriggerResponse(message, triggerWord);
-            }
-            return;
-        }
-    }
-
     if (!message.content.startsWith(prefix)) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
-    if (commandName === 'trigger') {
-        triggerCommand.execute(message, args);
-        return;
-    }
-
-    if (commandName === 'trigger_add') {
-        triggerCommand.execute(message, ['add', ...args]);
-        return;
-    }
 
     if (!command) return;
 
