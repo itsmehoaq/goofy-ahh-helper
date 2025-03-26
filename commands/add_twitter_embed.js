@@ -7,7 +7,7 @@ module.exports = {
 
             if (message.content.includes("||")) {
             } else {
-                message.channel.send(`[Tweet \u25b8 @${username}](https://fixv${newUrl.replace('fixupx.', 'x.').replace('vxtwitter.', 'x.').replace('fxtwitter.', 'x.').replace('twitter.', 'x.')})`)
+                message.channel.send(`[Tweet \u25b8 @${username}](https://fixup${newUrl.replace('fixupx.', 'x.').replace('vxtwitter.', 'x.').replace('fxtwitter.', 'x.').replace('twitter.', 'x.')})`)
             }
         } catch (error) {
             message.channel.send('lỗi rồi pri :D');
