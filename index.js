@@ -75,7 +75,7 @@ const registerCommands = async () => {
 
         const commands = [];
         client.commands.forEach(command => {
-            if (command.options) { // Only add commands that have slash command options
+            if (command.options) {
                 commands.push({
                     name: command.name,
                     description: command.description,
